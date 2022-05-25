@@ -68,7 +68,7 @@ For more information, see [Amazon EC2 Hpc6a Instances](http://aws.amazon.com/ec2
 
 ## Hardware specifications<a name="compute-instances-hardware"></a>
 
-The following is a summary of the hardware specifications for compute optimized instances\.
+The following is a summary of the hardware specifications for compute optimized instances\. A virtual central processing unit \(vCPU\) represents a portion of the physical CPU assigned to a virtual machine \(VM\)\. For x86 instances, there are two vCPUs per core\. For Graviton instances, there is one vCPU per core\.
 
 
 | Instance type | Default vCPUs | Memory \(GiB\) | 
@@ -166,11 +166,34 @@ The following is a summary of the hardware specifications for compute optimized 
 | c6i\.24xlarge | 96 | 192 | 
 | c6i\.32xlarge | 128 | 256 | 
 | c6i\.metal | 128 | 256 | 
+| c7g\.medium | 1 | 2 | 
+| c7g\.large | 2 | 4 | 
+| c7g\.xlarge | 4 | 8 | 
+| c7g\.2xlarge | 8 | 16 | 
+| c7g\.4xlarge | 16 | 32 | 
+| c7g\.8xlarge | 32 | 64 | 
+| c7g\.12xlarge | 48 | 96 | 
+| c7g\.16xlarge | 64 | 128 | 
 | hpc6a\.48xlarge | 96 | 384 | 
 
-For more information about the hardware specifications for each Amazon EC2 instance type, see [Amazon EC2 Instance Types](https://aws.amazon.com/ec2/instance-types/)\.
+The compute optimized instances use the following processors\.
 
-For more information about specifying CPU options, see [Optimize CPU options](instance-optimize-cpu.md)\.
+**AWS Graviton processors**
++ **AWS Graviton2**: C6g, C6gd, C6gn
++ **AWS Graviton3**: C7g
+
+**AMD processors**
++ **2nd generation AMD EPYC processors \(AMD EPYC 7R32\)**: C5a, C5ad
++ **3rd generation AMD EPYC processors \(AMD EPYC 7R13\)**: C6a, Hpc6a
+
+**Intel processors**
++ **Intel Xeon Scalable processors \(Haswell E5\-2666 v3\)**: C4
++ **Intel Xeon Scalable processors \(Skylake 8124\)**: C5n
++ **Intel Xeon Scalable processors \(Skylake 8124M or Cascade Lake 8223CL\)**: Smaller C5 and C5d
++ **2nd generation Intel Xeon Scalable processors \(Cascade Lake 8275CL\)**: Larger C5 and C5d
++ **3rd generation Intel Xeon Scalable processors \(Ice Lake 8375C\)**: C6i
+
+For more information, see [Amazon EC2 Instance Types](https://aws.amazon.com/ec2/instance-types/)\.
 
 ## Instance performance<a name="compute-performance"></a>
 
@@ -193,12 +216,16 @@ The following is a summary of network performance for compute optimized instance
 | c4\.8xlarge | 10 Gbps | [Intel 82599 VF](sriov-networking.md) | 
 | c5\.9xlarge \| c5a\.8xlarge \| c5ad\.8xlarge \| c5d\.9xlarge | 10 Gbps | [ENA](enhanced-networking-ena.md) | 
 | c5\.12xlarge \| c5a\.12xlarge \| c5ad\.12xlarge \| c5d\.12xlarge  \| c6g\.8xlarge \| c6gd\.8xlarge | 12 Gbps | [ENA](enhanced-networking-ena.md) | 
-|  c6a\.4xlarge and smaller \| c6i\.4xlarge and smaller  | Up to 12\.5 Gbps † | [ENA](enhanced-networking-ena.md) | 
+|  c6a\.4xlarge and smaller \| c6i\.4xlarge and smaller \| c7g\.xlarge and smaller | Up to 12\.5 Gbps † | [ENA](enhanced-networking-ena.md) | 
 | c6a\.8xlarge \| c6i\.8xlarge  | 12\.5 Gbps | [ENA](enhanced-networking-ena.md) | 
+| c7g\.2xlarge \| c7g\.4xlarge | Up to 15 Gbps | [ENA](enhanced-networking-ena.md) | 
+| c7g\.8xlarge | 15 Gbps |  | 
 | c6a\.12xlarge c6i\.12xlarge  | 18\.75 Gbps | [ENA](enhanced-networking-ena.md) | 
 | c5a\.16xlarge \| c5a\.24xlarge \| c5ad\.16xlarge \| c5ad\.24xlarge \| c6g\.12xlarge \| c6gd\.12xlarge | 20 Gbps | [ENA](enhanced-networking-ena.md) | 
+| c7g\.12xlarge | 22\.5 Gbps | [ENA](enhanced-networking-ena.md) | 
 | c5n\.4xlarge and smaller  \| c6gn\.4xlarge and smaller | Up to 25 Gbps † | [ENA](enhanced-networking-ena.md) | 
 | c5\.18xlarge \| c5\.24xlarge \| c5\.metal \| c5d\.18xlarge \| c5d\.24xlarge \| c5d\.metal \| c6a\.16xlarge  \| c6g\.16xlarge \| c6g\.metal  \| c6gd\.16xlarge \| c6gd\.metal  \| c6gn\.4xlarge \| c6i\.16xlarge  | 25 Gbps | [ENA](enhanced-networking-ena.md) | 
+| c7g\.16xlarge | 30 Gbps | [ENA](enhanced-networking-ena.md) | 
 | c6a\.24xlarge \| c6i\.24xlarge  | 37\.5 Gbps | [ENA](enhanced-networking-ena.md) | 
 | c5n\.9xlarge \| c6a\.32xlarge \| c6a\.48xlarge \| c6a\.metal  \| c6gn\.8xlarge \| c6i\.32xlarge \| c6i\.metal  | 50 Gbps | [ENA](enhanced-networking-ena.md) | 
 | c6gn\.12xlarge | 75 Gbps | [ENA](enhanced-networking-ena.md) | 
@@ -311,6 +338,7 @@ The following is a summary of features for compute optimized instances:
 | C6gd | No | Yes | NVMe \* | Yes | 
 | C6gn | Yes | Yes | No | Yes | 
 | C6i | Yes | Yes | No | Yes | 
+| C7g | Yes | Yes | No | Yes | 
 | Hpc6a | Yes | Yes | No | Yes | 
 
 **\*** The root device volume must be an Amazon EBS volume\.
@@ -321,10 +349,8 @@ For more information, see the following:
 + [Placement groups](placement-groups.md)
 
 ## Release notes<a name="compute-instance-release-notes"></a>
-+ C5 and C5d instances feature a 3\.1 GHz Intel Xeon Platinum 8000 series processor from either the first generation \(Skylake\-SP\) or second generation \(Cascade Lake\)\.
-+ C5a and C5ad instances feature a second\-generation AMD EPYC processor \(Rome\) running at frequencies as high as 3\.3\. GHz\.
-+ C6g, C6gd, and C6gn instances feature an AWS Graviton2 processor based on 64\-bit Arm architecture\.
 + C4 instances and instances built on the [Nitro System](instance-types.md#ec2-nitro-instances) require 64\-bit EBS\-backed HVM AMIs\. They have high\-memory and require a 64\-bit operating system to take advantage of that capacity\. HVM AMIs provide superior performance in comparison to paravirtual \(PV\) AMIs on high\-memory instance types\. In addition, you must use an HVM AMI to take advantage of enhanced networking\.
++ C7g instances are powered by the latest generation AWS Graviton3 processors\. They offer up to 25% better performance over the sixth generation AWS Graviton2\-based C6g instances\. C7g instances are the first in the cloud to feature DDR5 memory, which provides 50% higher memory bandwidth compared to DDR4 memory to enable high\-speed access to data in memory\.
 + Instances built on the Nitro System have the following requirements:
   + [NVMe drivers](nvme-ebs-volumes.md) must be installed
   + [Elastic Network Adapter \(ENA\) drivers](enhanced-networking-ena.md) must be installed
@@ -359,7 +385,6 @@ For more information, see the following:
   + Ubuntu 20\.04 with kernel 5\.4\.0\-1025\-aws
   + Red Hat Enterprise Linux 8\.3 with kernel 4\.18\.0\-240\.1\.1\.el8\_3\.ARCH
   + SUSE Linux Enterprise Server 15 SP2 with kernel 5\.3\.18\-24\.15\.1
-+ [Traffic Mirroring](https://docs.aws.amazon.com/vpc/latest/mirroring/) is not supported on C6gn instances\.
 + To launch AMIs for all Linux distributions on C6gn instances, use AMIs with the latest version and run an update for the latest driver\. For earlier versions, download the latest driver from [GitHub](https://github.com/amzn/amzn-drivers/tree/master/kernel/linux/ena)\.
 + Launching a bare metal instance boots the underlying server, which includes verifying all hardware and firmware components\. This means that it can take 20 minutes from the time the instance enters the running state until it becomes available over the network\.
 + To attach or detach EBS volumes or secondary network interfaces from a bare metal instance requires PCIe native hotplug support\. Amazon Linux 2 and the latest versions of the Amazon Linux AMI support PCIe native hotplug, but earlier versions do not\. You must enable the following Linux kernel configuration options:

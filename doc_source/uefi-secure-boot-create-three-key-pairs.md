@@ -1,6 +1,6 @@
 # Create three key pairs<a name="uefi-secure-boot-create-three-key-pairs"></a>
 
-UEFI Secure Boot is based on the following three key databases, which are used in a chain of trust: the platform key \(PK\), the key exchange key \(KEK\), and the signature database \(db\)\. The commands for creating the PK, creating the KEK, creating the DB, and signing the image are from [Creating keys](https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Creating_keys), authored by the ArchWiki Maintenance Team and/or the ArchWiki contributors\.
+UEFI Secure Boot is based on the following three key databases, which are used in a chain of trust: the platform key \(PK\), the key exchange key \(KEK\), and the signature database \(db\)\.¹
 
 You create each key on the instance\. To prepare the public keys in a format that is valid for the UEFI Secure Boot standard, you create a certificate for each key\. `DER` defines the SSL format \(binary encoding of a format\)\. You then convert each certificate into a UEFI signature list, which is the binary format that is understood by UEFI Secure Boot\. And finally, you sign each certificate with the relevant key\.
 
@@ -143,3 +143,5 @@ sbsign --key db.key --cert db.crt --output /boot/vmlinuz /boot/vmlinuz
 You must sign all new kernels\. *`/boot/vmlinuz`* will usually symlink to the last installed kernel\.
 
 Refer to the documentation for your distribution to find out about your boot chain and required images\.
+
+¹ Thanks to the ArchWiki community for all of the work they have done\. The commands for creating the PK, creating the KEK, creating the DB, and signing the image are from [Creating keys](https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Creating_keys), authored by the ArchWiki Maintenance Team and/or the ArchWiki contributors\.
